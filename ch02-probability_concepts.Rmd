@@ -1,0 +1,112 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+## Binomial distribution
+Some examples where the results of an experiment can be modeled by a bino-
+mial random variable are:
+
+* A drug has probability 0.90 of curing a disease. It is administered
+to 100 patients, where the outcome for each patient is either cured
+or not cured. If X is the number of patients cured, then X is a
+binomial random variable with parameters (100, 0.90).
+
+* The National Institute of Mental Health estimates that there is a
+20% chance that an adult American suffers from a psychiatric dis-
+order. Fifty adult Americans are randomly selected. If we let X
+represent the number who have a psychiatric disorder, then X takes
+on values according to the binomial distribution with parameters
+(50, 0.20).
+
+* A manufacturer of computer chips finds that on the average 5%
+are defective. To monitor the manufacturing process, they take a
+random sample of size 75. If the sample contains more than five
+defective chips, then the process is stopped. The binomial distri-
+bution with parameters (75, 0.05) can be used to model the random
+variable X, where X represents the number of defective chips.
+
+
+## Example 2.1
+Suppose there is a 20% chance that an adult American suffers from a psychi-
+atric disorder. We randomly sample 25 adult Americans. If we let X represent
+the number of people who have a psychiatric disorder, then X is a binomial
+random variable with parameters . We are interested in the proba-
+bility that at most 3 of the selected people have such a disorder. We can use
+the MATLAB Statistics Toolbox function binocdf to determine , as
+follows:
+
+```{r}
+library(RcppOctave)
+.CallOctave("version")
+
+binocdf <- OctaveFunction("
+function [b] = binocdf_()
+  pkg load statistics
+
+  b = binocdf(3, 25, 0.2);
+end
+")
+
+```
+
+
+```{r}
+prob <- binocdf()
+
+prob
+```
+
+
+We could also sum up the individual values of the probability mass function
+from X = 0 to X = 3:
+```{r}
+binopdf <- OctaveFunction("
+function [b] = binopdf_()
+  pkg load statistics
+
+  b = sum(binopdf(0:3, 25, 0.2));
+end
+")
+
+prob2 <- binopdf()
+prob2
+```
+
+Both of these commands return a probability of 0.234. We now show how to
+generate the binomial distributions shown in Figure 2.3.
+
+```{r}
+# Get the values for the domain, x
+x <- 0:6
+
+# Get the values of the probability mass function.
+# First for n = 6, p = 0.3:
+pdf1 <- .O$binopdf(x, 6, 0.3)
+
+# Now for n = 6, p = 0.7
+pdf2 <- .O$binopdf(x, 6, 0.7)
+```
+
+```{r}
+pdf1
+pdf2
+```
+
+```{r}
+library(ggplot2)
+library(gridExtra)
+
+df <- data.frame(x, pdf1, pdf2)
+
+p1 <- ggplot(df, aes(x, pdf1)) +
+  geom_bar(stat = "identity") +
+  ggtitle("n = 6, p = 0.3")
+
+p2 <- ggplot(df, aes(x, pdf2)) +
+  geom_bar(stat = "identity") +
+  ggtitle("n = 6, p = 0.7")
+
+gridExtra::grid.arrange(p1, p2)
+```
+
