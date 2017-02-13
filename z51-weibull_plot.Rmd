@@ -80,6 +80,24 @@ rug(xmp04.31$lifetime, col = "blue")
 
 ```
 
+## Contouring the log-likelihood function
+
+```{r}
+grid <- matrix(0.0, nrow = 101, ncol = 101)
+scvals <- seq(0.5, 3.5, len = 101) # scale parameter
+shvals <- seq(500, 2500, len = 101) # shape parameter
+
+for (i in seq(along = scvals)) {
+  for (j in seq(along = shvals)) {
+    grid[i,j] <- llfunc(c(scvals[i], shvals[j]))
+  }
+}
+
+contour(scvals, shvals, grid, levels = 77:85)
+points(mle$estimate[1], mle$estimate[2], pch = "+", cex = 1.5)
+title(xlab = expression(alpha), ylab = expression(beta))
+```
+
 
 
 
