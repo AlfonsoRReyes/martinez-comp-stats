@@ -1,0 +1,28 @@
+---
+title: "dentifying a distribution by its histogram"
+output: html_notebook
+---
+
+Source: http://stats.stackexchange.com/a/8674
+
+
+```{r fig.asp=1}
+library(fitdistrplus)
+
+x1 <- c(6.4, 13.3, 4.1, 1.3, 14.1, 10.6, 9.9, 9.6, 15.3, 22.1, 13.4, 13.2, 8.4, 6.3, 8.9, 5.2, 10.9, 14.4)
+plotdist(x1)
+descdist(x1)
+
+```
+
+```{r}
+f1g <- fitdist(x1, "gamma")
+plot(f1g)
+summary(f1g) 
+```
+
+```{r}
+f1g <- fitdist(x1, "lnorm")
+plot(f1g)
+summary(f1g) 
+```
