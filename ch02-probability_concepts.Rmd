@@ -338,3 +338,24 @@ Manually, the calculation is:
 $$
 P(X<= 10) = 1 - e^{-(1/12)10} \approx 0.57
 $$
+
+
+```{r fig.asp=0.8}
+gampdf <- OctaveFunction("
+function [p] = gampdf_(x, t, lambdainv)
+  pkg load statistics
+  p = gampdf(x, t, lambdainv);
+end
+")
+
+x <- seq(0, 3, 0.1)
+y1 <- gampdf(x, 1, 1/1)
+y2 <- gampdf(x, 2, 1/2)
+y3 <- gampdf(x, 3, 1/3)
+
+plot(x, y1, type = "l", col = "red", 
+     main = "Gamma Distribution", xlab = "X", ylab = "f(x)")
+lines(x, y2, col = "green")
+lines(x, y3, col = "blue")
+```
+FIGURE 8. We show three examples of the gamma probability density function. We see that when $\lambda = t = 1$, we have the same probability density function as the exponential with parameter $\lambda = 1$
