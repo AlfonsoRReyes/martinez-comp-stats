@@ -305,4 +305,36 @@ normal(5, 2, 2, 8)
 ```
 
 
+## Exponential
+The exponential distribution can be used to model the amount of time until a
+specific event occurs or to model the time between independent events. Some
+examples where an exponential distribution could be used as the model are:
 
+* the time until the computer locks up,
+* the time between arrivals of telephone calls, or
+* the time until a part fails. 
+
+## Example 2.6
+The time between arrivals of vehicles at an intersection follows an exponen-
+tial distribution with a mean of 12 seconds. What is the probability that the
+time between arrivals is 10 seconds or less? We are given the average interarrival time, so $\lambda = 1/12$. 
+
+We can calculate this using the Octave function `expcdf`.
+
+```{r}
+csexpoc <- OctaveFunction("
+function [p] = csexpoc_(x, lambda)
+  pkg load statistics
+  p = expcdf(x, lambda);
+end
+")
+
+prob <- csexpoc(10, 12)
+prob
+```
+
+Manually, the calculation is:
+
+$$
+P(X<= 10) = 1 - e^{-(1/12)10} \approx 0.57
+$$
