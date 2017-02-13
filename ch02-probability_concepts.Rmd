@@ -233,7 +233,53 @@ plot(x, pdf, type = "l", main = "PDF", ylim = c(0, 0.2), ylab = "f(X)")
 plot(x, cdf, type = "l", main = "CDF", ylim = c(0, 1), ylab = "F(X)")
 ```
 
-```{r}
+**FIGURE 2.4** On the left is a plot of the probability density function for the uniform (0, 10). Note that the height of the curve is given by . The corresponding cumulative distribution function is shown on the right.
 
+
+## Normal
+A well known distribution in statistics and engineering is the normal distri-
+bution. Also called the Gaussian distribution, it has a continuous probability
+density function given by
+  <equation>
+
+Some special properties of the normal distribution are given here.
+
+* The value of the probability density function approaches zero as x
+approaches positive and negative infinity.
+* The probability density function is centered at the mean $\mu$ , and
+the maximum value of the function occurs at $x = \mu$.
+* The probability density function for the normal distribution is sym-
+metric about the mean $\mu$
+
+
+## Example 2.5
+Similar to the uniform distribution, the functions `normpdf` and `normcdf` are
+available in the MATLAB Statistics Toolbox for calculating the probability
+density function and cumulative distribution function for the normal. There
+is another special function called `normspec` that determines the probability
+that a random variable X assumes a value between two limits, where X is nor-
+mally distributed with mean and standard deviation This function also
+plots the normal density, where the area between the specified limits is
+shaded. The syntax is shown below.
+
+```{r}
+mu <- 5
+sigma = 2
+# set up the upper and lower limits
+specs <- c(2, 8)
+
+# the function normspec is not implemented in Octave yet.
+
+# normspec <- OctaveFunction("
+# function [p] = normspec_(specs, mu, sigma)
+#   pkg load statistics
+#   normspec(specs, mu, sigma);
+# end
+# ")
+
+prob <- normspec(specs, mu, sigma)
+prob
 ```
+
+
 
