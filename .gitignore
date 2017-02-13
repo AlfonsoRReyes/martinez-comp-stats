@@ -24,3 +24,5 @@ vignettes/*.pdf
 *.knit.md
 .Rproj.user
 ch02-probability_concepts.nb.html
+ch02-probability_concepts.html
+ch02-probability_concepts_files

@@ -1,7 +1,28 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  html_document: default
+  html_notebook: default
 ---
+
+```{r setup, include=FALSE, error=TRUE, message=FALSE}
+# Set knitr options for knitting code into the report:
+# - Don't print out code (echo)
+# - Save results so that code blocks aren't re-run unless code changes (cache),
+# _or_ a relevant earlier code block changed (autodep), but don't re-run if the
+# only thing that changed was the comments (cache.comments)
+# - Don't clutter R output with messages or warnings (message, warning)
+  # This _will_ leave error messages showing up in the knitted report
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      cache = TRUE,
+                      autodep = TRUE,
+                      cache.comments = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      error = TRUE,
+                      comment = NA)
+```
 
 ## Discrete Distributions
 * Binomial
@@ -117,4 +138,53 @@ p2 <- ggplot(df, aes(x, pdf2)) +
 
 gridExtra::grid.arrange(p1, p2, ncol =2)
 ```
+
+## Poisson
+The Poisson distribution can be used in many applications. Examples of sit-
+uations where a discrete random variable might follow a Poisson distribution
+are:
+
+* the number of typographical errors on a page,
+* the number of vacancies in a company during a month, or
+* the number of defects in a length of wire.
+
+
+## Example 2.2
+In preparing this text, we executed the spell check command, and the editor
+reviewed the manuscript for typographical errors. In spite of this, some mis-
+takes might be present. Assume that the number of typographical errors per
+page follows the Poisson distribution with parameter $\alpha = 0.25$. We calculate the probability that a page will have at least two errors as follows:
+
+```{r}
+poisscdf <- OctaveFunction("
+function [x] = poisscdf_(X, lambda)
+  pkg load statistics
+
+  x = poisscdf(X, lambda);
+end
+")
+
+prob <- 1 - poisscdf(1, 0.25)
+prob
+```
+
+WHich is calculated:
+
+$$
+P(X >= 2) = 1 - \{ P(X=0) + P(X=1) \} \\
+= 1 - e^{-0.25} - e^{-0.25} \times 0.25 \approx 0.0265
+$$
+
+##  Example 2.3
+Suppose that accidents at a certain intersection occur in a manner that satis-
+fies the conditions for a Poisson process with a rate of 2 per week ($\alpha = 2$). What is the probability that at most 3 accidents will occur during the
+next 2 weeks? Using Equation 2.26, we have:
+
+As before, we can use the poisscdf function with parameter given by $\lambda t = 2 \times 2$:
+
+```{r}
+prob <- poisscdf(3, 2*2)
+prob
+```
+
 
