@@ -3,6 +3,7 @@ title: "R Notebook"
 output: html_notebook
 ---
 
+## An R sesssion on the Weibull example
 ```{r}
 library(Devore7)
 
@@ -10,10 +11,7 @@ data(xmp04.31)
 str(xmp04.31)
 ```
 
-The Weibull probability plot is not available directly in R. However, the plot
-can be created using the formula ln[− ln(1 − p)] for the 5th, 15th, . . . , and 95th
-percentiles as given in text. The sequence 0.05, 0.15, . . . , 0.95 is generated with
-seq(0.05, 0.95, 0.1).
+The Weibull probability plot is not available directly in R. However, the plot can be created using the formula ln[− ln(1 − p)] for the 5th, 15th, . . . , and 95th percentiles as given in text. The sequence 0.05, 0.15, . . . , 0.95 is generated with seq(0.05, 0.95, 0.1).
 
 ```{r}
 with(xmp04.31, 
@@ -24,8 +22,6 @@ with(xmp04.31,
 # Reasonable starting estimates are shape = 1, scale = 1000
 # Do a simple evaluation at this set of parameters￿
 sum(dweibull(xmp04.31$lifetime, shape=1, scale=1000, log=TRUE))
-
-
 ```
 
 ```{r}
@@ -33,5 +29,28 @@ sum(dweibull(xmp04.31$lifetime, shape=1, scale=1000, log=TRUE))
 llfunc <- function(x) { # express as a function
  -sum(dweibull(xmp04.31$lifetime, shape=x[1], scale=x[2], log=TRUE))
 }
+
+# apply non-linear minimization
+mle <- nlm(llfunc, c(shape = 1, scale = 1000), hessian = TRUE)
+
 ```
+
+## Results of the Weibull Example
+
+```{r}
+str(mle)
+```
+
+
+```{r}
+solve(mle$hessian) # approximate variance-covariance matrix￿İ
+```
+
+We see that the maximum of the log-likelihood is -77.1 achieved
+at $\alpha = 2.15$ and $\beta = 1289.34$. The approximate standard errors of the estimates are $0.5444 = \sqrt 0.29596$ and $199.6 = \sqrt 38935.82$. We can use the standard errors to determine a grid of $(\alpha, \beta)$ values for contouring the log-likelihood function.
+
+
+
+
+
 
