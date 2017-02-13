@@ -5,19 +5,24 @@ output: html_notebook
 
 Source: http://www.stat.wisc.edu/~bates/JSM2001.pdf
 
+
+## Example 4.31. Weibull distribution
+The Weibull probability plot is not available directly in R. However, the plot can be created using the formula ln[− ln(1 − p)] for the 5th, 15th, . . . , and 95th percentiles as given in text. The sequence 0.05, 0.15, . . . , 0.95 is generated with seq(0.05, 0.95, 0.1).
+
+```{r}
+library(Devore7)
+
+data(xmp04.31)
+with(xmp04.31, 
+     plot(log(-log(1 - seq(0.05, 0.95, 0.1))), log(lifetime)))
+```
+
 ## An R sesssion on the Weibull example
 ```{r}
 library(Devore7)
 
 data(xmp04.31)
 str(xmp04.31)
-```
-
-The Weibull probability plot is not available directly in R. However, the plot can be created using the formula ln[− ln(1 − p)] for the 5th, 15th, . . . , and 95th percentiles as given in text. The sequence 0.05, 0.15, . . . , 0.95 is generated with seq(0.05, 0.95, 0.1).
-
-```{r}
-with(xmp04.31, 
-     plot(log(-log(1 - seq(0.05, 0.95, 0.1))), log(lifetime)))
 ```
 
 ```{r}
@@ -51,6 +56,26 @@ solve(mle$hessian) # approximate variance-covariance matrix￿İ
 We see that the maximum of the log-likelihood is -77.1 achieved
 at $\alpha = 2.15$ and $\beta = 1289.34$. The approximate standard errors of the estimates are $0.5444 = \sqrt 0.29596$ and $199.6 = \sqrt 38935.82$. We can use the standard errors to determine a grid of $(\alpha, \beta)$ values for contouring the log-likelihood function.
 
+## Plotting the desnsity at the estimates
+
+```{r}
+plot(function(x) dweibull(x, shape = 2.15, scale = 1289.34), 0, 3000,
+col = "red", xlab = "lifetime (hr)", ylab = "density",
+ main = "Weibull density using MLEs from the lifetime data")
+rug(xmp04.30$lifetime, col = "blue")
+
+```
+
+Or:
+```{r}
+weibull <- function(x) dweibull(x, shape = 2.15, scale = 1289.34)
+
+plot(weibull, 0, 3000,
+col = "red", xlab = "lifetime (hr)", ylab = "density",
+ main = "Weibull density using MLEs from the lifetime data")
+rug(xmp04.30$lifetime, col = "blue")
+
+```
 
 
 
