@@ -1,0 +1,37 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(Devore7)
+
+data(xmp04.31)
+str(xmp04.31)
+```
+
+The Weibull probability plot is not available directly in R. However, the plot
+can be created using the formula ln[− ln(1 − p)] for the 5th, 15th, . . . , and 95th
+percentiles as given in text. The sequence 0.05, 0.15, . . . , 0.95 is generated with
+seq(0.05, 0.95, 0.1).
+
+```{r}
+with(xmp04.31, 
+     plot(log(-log(1 - seq(0.05, 0.95, 0.1))), log(lifetime)))
+```
+
+```{r}
+# Reasonable starting estimates are shape = 1, scale = 1000
+# Do a simple evaluation at this set of parameters￿
+sum(dweibull(xmp04.31$lifetime, shape=1, scale=1000, log=TRUE))
+
+
+```
+
+```{r}
+# Optimization functions minimize so use negative log-likelihood
+llfunc <- function(x) { # express as a function
+ -sum(dweibull(xmp04.31$lifetime, shape=x[1], scale=x[2], log=TRUE))
+}
+```
+
