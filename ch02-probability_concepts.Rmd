@@ -281,5 +281,28 @@ prob <- normspec(specs, mu, sigma)
 prob
 ```
 
+```{r}
+normal = function(mean, sd, lb,ub){
+  x <- seq(-4, 4, length=100) * sd + mean
+  hx <- dnorm(x, mean, sd)
+ 
+  plot(x, hx, type="n", ylab="", 
+       axes = FALSE,
+       main="Normal Distribution")
+ 
+  i <- x >= lb & x <= ub
+  lines(x, hx)
+  polygon(c(lb, x[i], ub), c(0, hx[i], 0), col="red")
+ 
+  area <- pnorm(ub, mean, sd) - pnorm(lb, mean, sd)
+  result <- paste("P(",lb,"< IQ <",ub,") =",
+                  signif(area, digits=3))
+  mtext(result, 3)
+  axis(1, at=seq(mean-4*sd, mean+4*sd, sd), pos=0) 
+}
+
+normal(5, 2, 2, 8)
+```
+
 
 
