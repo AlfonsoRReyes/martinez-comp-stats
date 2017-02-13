@@ -1,7 +1,28 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  html_document: default
+  html_notebook: default
 ---
+
+```{r setup, include=FALSE, error=TRUE, message=FALSE}
+# Set knitr options for knitting code into the report:
+# - Don't print out code (echo)
+# - Save results so that code blocks aren't re-run unless code changes (cache),
+# _or_ a relevant earlier code block changed (autodep), but don't re-run if the
+# only thing that changed was the comments (cache.comments)
+# - Don't clutter R output with messages or warnings (message, warning)
+  # This _will_ leave error messages showing up in the knitted report
+
+knitr::opts_chunk$set(echo = TRUE, 
+                      cache = TRUE,
+                      autodep = TRUE,
+                      cache.comments = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      error = TRUE,
+                      comment = NA)
+```
 
 Source: http://www.stat.wisc.edu/~bates/JSM2001.pdf
 
@@ -98,6 +119,66 @@ points(mle$estimate[1], mle$estimate[2], pch = "+", cex = 1.5)
 title(xlab = expression(alpha), ylab = expression(beta))
 ```
 
+Or use levels calculated from the chi-square distribution
+```{r}
+# Or use levels calculated from the chi-square distribution
+contour(scvals, shvals, grid,
+ levels = mle$min + qchisq(c(0.5,0.8,0.9,0.95,0.99), 2),
+ labels = paste(c(50,80,90,95,99), "%", sep = ""))
+```
+
+## Lessons from the Weibull example
+
+* The likelihood function is the same as the probability density but with the parameters varying and the data ﬁxed.
+
+* For a random sample, the log-likelihood is 
+  `sum(d<distname>(<data>, par1, par2, ..., log = TRUE))`
+
+* We minimize the negative of the log-likelihood
+```
+llfunc <- function(x)
+      -sum(d<distname>(<data>, par1 = x[1], ..., log = TRUE))
+mle <- nlm(llfunc, <starting estimates>, hessian = TRUE)
+```
+* The inverse of the hessian provides an estimate of the variance-covariance matrix.
+
+* For two-parameter models we can evaluate a grid of log-likelihood values and get contours.
+
+* Standard errors from the inverse hessian are not always realistic indications of the variability in the parameter estimates.
+
+
+```{r}
+weibull <- function(x) dweibull(x, shape = 2, scale = 1)
+
+plot(weibull, 
+     xlim = c(0, 2), 
+     col = "red", xlab = "lifetime (hr)", 
+     ylab = "density",
+     main = "Weibull density")
+
+
+
+```
+
+```{r}
+library(ggplot2)
+
+funcs <- list(function(x) dweibull(x, shape = 1,   scale = 1),
+              function(x) dweibull(x, shape = 2,   scale = 1),
+              function(x) dweibull(x, shape = 3.5, scale = 1))
+
+cols <- heat.colors(3, 1)
+
+p <-ggplot() + 
+  xlim(c(0, 2))  
+
+for(i in 1:length(funcs))
+    p <- p + stat_function(aes(y=0), 
+                           fun = funcs[[i]], 
+                           colour = cols[i])
+p <- p + labs(x = "x", y = "f(x)")
+print(p)
+```
 
 
 
