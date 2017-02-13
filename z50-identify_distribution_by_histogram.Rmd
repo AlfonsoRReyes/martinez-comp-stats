@@ -1,7 +1,10 @@
 ---
-title: "R Notebook"
+title: "dentifying a distribution by its histogram"
 output: html_notebook
 ---
+
+Source: http://stats.stackexchange.com/a/8674
+
 
 ```{r fig.asp=1}
 library(fitdistrplus)
