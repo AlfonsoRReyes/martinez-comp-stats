@@ -70,10 +70,13 @@ Or:
 ```{r}
 weibull <- function(x) dweibull(x, shape = 2.15, scale = 1289.34)
 
-plot(weibull, 0, 3000,
-col = "red", xlab = "lifetime (hr)", ylab = "density",
- main = "Weibull density using MLEs from the lifetime data")
-rug(xmp04.30$lifetime, col = "blue")
+plot(weibull, 
+     xlim = c(0, 3000), 
+     col = "red", xlab = "lifetime (hr)", 
+     ylab = "density",
+     main = "Weibull density using MLEs from the lifetime data")
+
+rug(xmp04.31$lifetime, col = "blue")
 
 ```
 
