@@ -370,14 +370,87 @@ Suppose the time to failure of piston rings for stream-driven compressors can
 be modeled by the Weibull distribution with a location parameter of zero, $\beta = 1/3$, and $\alpha = 500$. We can find the mean time to failure using the expected value of a Weibull random variable, as follows:
 
 ```{r}
-mttf <- 1/.O$wblpdf(1, 3) * 500 
+mttf <- 1/.O$wblcdf(1, 500^(-1/3), 3)
 mttf
 ```
 
 
 ```{r}
-# wblcdf(x, scale, xhape)
+# wblcdf(x, scale, shape)
 prob <- .O$wblcdf(2000, 500, 1/3)
 prob
+```
+
+```{r}
+
+```
+
+**NOTE**
+In Martinez book, $\nu$ is the `location` parameter, $\alpha$ is the `scale`, and the `shape` is $\beta$.
+
+### Weibull CDF
+From the Octave manual in 2005:
+
+**`wblcdf`(x, alpha, sigma)** \    
+
+         Compute the cumulative distribution function (CDF) at X of the
+         Weibull distribution with shape parameter ALPHA and scale
+         parameter SIGMA, which is
+             1 - exp(-(x/alpha)^sigma)
+             for X >= 0.
+       
+   
+   
+```{r}
+x <- 2000
+alpha <- 500
+beta <- sigma <- 1/3
+
+1 - exp(-(x/alpha)^sigma)
+```     
+
+```{r}
+.O$wblcdf(x, alpha, sigma)
+```
+
+### Weibull random matrix
+`wblrnd` (ALPHA, SIGMA, R, C) \     
+
+     Return an R by C matrix of random samples from the Weibull
+     distribution with parameters ALPHA and SIGMA which must be scalar
+     or of size R by C.
+
+     If R and C are omitted, the size of the result matrix is the
+     common size of ALPHA and SIGMA.
+     
+     
+```{r}
+.O$wblrnd(alpha, sigma, 4, 4)
+```
+
+### Weibull quantile
+
+`wblinv` (X, LAMBDA, ALPHA) \   
+
+     Compute the quantile (the inverse of the CDF) at X of the Weibull
+     distribution with shape parameter ALPHA and scale parameter SIGMA.
+
+     
+```{r}
+.O$wblinv(x, alpha, sigma)
+```
+Is this correct?
+
+### Weibull PDF
+`wblpdf` (X, ALPHA, SIGMA) \   
+
+     Compute the probability density function (PDF) at X of the Weibull
+     distribution with shape parameter ALPHA and scale parameter SIGMA
+     which is given by
+             alpha * sigma^(-alpha) * x^(alpha-1) * exp(-(x/sigma)^alpha)
+     for X > 0.
+
+```{r}
+.O$wblpdf(x, alpha, sigma)
 ```
 
