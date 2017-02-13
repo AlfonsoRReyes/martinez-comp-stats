@@ -187,4 +187,53 @@ prob <- poisscdf(3, 2*2)
 prob
 ```
 
+## Uniform
+Perhaps one of the most important distributions is the uniform distribution
+for continuous random variables. One reason is that the uniform (0, 1) distri-
+bution is used as the basis for simulating most random variables as we dis-
+cuss in Chapter 4.
+
+## Example 2.4
+In this example, we illustrate the uniform probability density function over
+the interval (0, 10), along with the corresponding cumulative distribution
+function. The MATLAB Statistics Toolbox functions unifpdf and unifcdf
+are used to get the desired functions over the interval.
+
+```{r}
+# First, get the domain over which we will evaluate the function
+x <- seq(-1, 11, 0.1)
+
+# implement the functions in Octave
+unifpdf <- OctaveFunction("
+function [p] = unifpdf_(X, a, b)
+  pkg load statistics
+  p = unifpdf(X, a, b);
+end
+")
+
+unifcdf <- OctaveFunction("
+function [p] = unifcdf_(X, a, b)
+  pkg load statistics
+  p = unifcdf(X, a, b);
+end
+")
+
+# Get the probability density function values at x
+pdf <- unifpdf(x, 0, 10)
+
+# Now get the cdf
+cdf <- unifcdf(x, 0, 10)
+
+```
+
+
+```{r fig.asp=1}
+par(mfrow=c(1,2))
+plot(x, pdf, type = "l", main = "PDF", ylim = c(0, 0.2), ylab = "f(X)")
+plot(x, cdf, type = "l", main = "CDF", ylim = c(0, 1), ylab = "F(X)")
+```
+
+```{r}
+
+```
 
