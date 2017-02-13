@@ -359,3 +359,25 @@ lines(x, y2, col = "green")
 lines(x, y3, col = "blue")
 ```
 FIGURE 8. We show three examples of the gamma probability density function. We see that when $\lambda = t = 1$, we have the same probability density function as the exponential with parameter $\lambda = 1$
+
+## Weibull
+The Weibull distribution has many applications in engineering. In particular,
+it is used in reliability analysis. It can be used to model the distribution of the amount of time it takes for objects to fail. For the special case where 
+$\nu = 0$ and $\beta = 1$, the Weibull reduces to the exponential with $\lambda = 1 / \alpha$.
+
+## Example 2.8 
+Suppose the time to failure of piston rings for stream-driven compressors can
+be modeled by the Weibull distribution with a location parameter of zero, $\beta = 1/3$, and $\alpha = 500$. We can find the mean time to failure using the expected value of a Weibull random variable, as follows:
+
+```{r}
+mttf <- 1/.O$wblpdf(1, 3) * 500 
+mttf
+```
+
+
+```{r}
+# wblcdf(x, scale, xhape)
+prob <- .O$wblcdf(2000, 500, 1/3)
+prob
+```
+
